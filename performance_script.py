@@ -17,8 +17,8 @@ class Performance:
         # [(current_time, receive_bytes, transmit_bytes)]
         self.app_network_traffic = []
 
-    def get_app_install_time(self, app_file):
-        command_uninstall = "adb uninstall " + app_file
+    def get_app_install_time(self, app_file, package_name):
+        command_uninstall = "adb uninstall " + package_name
         self.__run_cmd(command_uninstall, check=False)
 
         command_install = "adb install " + app_file
@@ -27,6 +27,17 @@ class Performance:
         self.__run_cmd(command_install)
         app_install_end = time.time()
         self.app_install_time = app_install_end - app_install_start
+        print(self.app_install_time)
+
+    def get_app_uninstall_time(self, package_name):
+        command_uninstall = "adb uninstall " + package_name
+
+        app_uninstall_start = time.time()
+
+        self.__run_cmd(command_uninstall)
+        app_uninstall_end = time.time()
+        app_uninstall_time = app_uninstall_end - app_uninstall_start
+        print(app_uninstall_time)
 
     def get_app_launch_time(self, app_package_name, app_main_activity):
         # Stop the app first
@@ -130,12 +141,14 @@ def main():
     print(options.file)
     print(options.interval)
 
-    if not options.package or not options.activity or not options.file:
+    # not options.package or not options.activity or
+
+    if not options.file:
         parser.error("please provide the corresponding parameters")
 
     performance = Performance()
 
-    #performance.get_app_install_time(options.file)
+    performance.get_app_install_time(options.file, options.package)
 
 
 def test():
