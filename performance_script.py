@@ -46,7 +46,7 @@ class Performance:
 
         command_launch = "adb shell am start -W -n {}/{}".format(app_package_name, app_main_activity)
         ret = self.__run_cmd(command_launch)
-        self.app_launch_time = re.search(r'(?<=ThisTime: )\d+', ret).group()
+        self.app_launch_time = re.search(r'(?<=TotalTime: )\d+', ret).group()
         print("app_launch_time is: {}".format(self.app_launch_time))
 
     def get_app_cpu_mem(self, app_package_name):
