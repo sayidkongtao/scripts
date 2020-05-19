@@ -18,12 +18,12 @@ def main():
 
     # not options.package or not options.activity or
 
-    if not options.package:
+    if not options.package or not options.activity:
         parser.error("please provide the corresponding parameters")
 
     performance = Performance()
 
-    performance.get_app_uninstall_time(options.package)
+    performance.get_app_launch_time(options.package, options.activity)
 
 
 if __name__ == "__main__":

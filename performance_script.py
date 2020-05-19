@@ -27,7 +27,7 @@ class Performance:
         self.__run_cmd(command_install)
         app_install_end = time.time()
         self.app_install_time = app_install_end - app_install_start
-        print(self.app_install_time)
+        print("app_install_time is: {}".format(self.app_install_time))
 
     def get_app_uninstall_time(self, package_name):
         command_uninstall = "adb uninstall " + package_name
@@ -37,16 +37,17 @@ class Performance:
         self.__run_cmd(command_uninstall)
         app_uninstall_end = time.time()
         app_uninstall_time = app_uninstall_end - app_uninstall_start
-        print(app_uninstall_time)
+        print("app_uninstall_time is: {}".format(app_uninstall_time))
 
     def get_app_launch_time(self, app_package_name, app_main_activity):
         # Stop the app first
         command_stop = "adb shell am force-stop " + app_package_name
         self.__run_cmd(command_stop, check=False)
 
-        command_launch = "adb shell am start -W -n {}/.{}".format(app_package_name, app_main_activity)
+        command_launch = "adb shell am start -W -n {}/{}".format(app_package_name, app_main_activity)
         ret = self.__run_cmd(command_launch)
-        self.app_launch_time = re.search(r'(?<=ThisTime: )\d+', ret.stdout).group()
+        self.app_launch_time = re.search(r'(?<=ThisTime: )\d+', ret).group()
+        print("app_launch_time is: {}".format(self.app_launch_time))
 
     def get_app_cpu_mem(self, app_package_name):
         command = "adb shell top -b -n 1 | {} {}".format(self.__find_str, app_package_name)
@@ -99,7 +100,7 @@ class Performance:
     def get_user_id(self, package_name):
         command = "adb shell dumpsys package {} | {} userId".format(package_name, self.__find_str)
         ret = self.__run_cmd(command)
-        user_id = re.search(r'(?<=userId=)\d+', ret.stdout).group()
+        user_id = re.search(r'(?<=userId=)\d+', ret).group()
         return user_id;
 
     def get_current_time(self):
